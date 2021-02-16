@@ -1,17 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:project/model/resturant.dart';
-import 'package:project/scenes/user/menu.dart';
-import 'package:project/scenes/user/home.dart';
+import 'model/resturant.dart';
+import 'scenes/user/menu.dart';
+import 'scenes/user/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
-    title: 'Navigation Basics',
-    home: MyApp(),
-  ));
+  runApp(
+    MaterialApp(
+      title: 'Navigation Basics',
+      home: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
