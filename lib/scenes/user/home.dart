@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
+// import 'dart:js_util';
 import 'dart:math';
 import 'dart:io' show Platform;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:latlong/latlong.dart' as latLng;
+import 'package:project/model/item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:flutter/foundation.dart';
@@ -25,6 +28,11 @@ class _Home extends State<Home> with WidgetsBindingObserver {
   var isRunning = true;
   final resturantsList = <Resturant>[];
 
+  var regions = <Region>[];
+  int beaconLength = 0;
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
   final StreamController<BluetoothState> streamController = StreamController();
   StreamSubscription<BluetoothState> _streamBluetooth;
   StreamSubscription<RangingResult> _streamRanging;
@@ -41,10 +49,21 @@ class _Home extends State<Home> with WidgetsBindingObserver {
 
     super.initState();
 
+    // db.collection("restaurantes").get().then((querySnapshot) {
+    //   querySnapshot.docs.forEach((result) {
+    //     print("asdasd");
+    //     print(result.data());
+    //   });
+    // });
+
+    // print(regions.length);
+
     listeningState();
   }
 
   listeningState() async {
+    await getData().then((value) => {regions = value});
+
     print('Listening to bluetooth state');
     _streamBluetooth = flutterBeacon
         .bluetoothStateChanged()
@@ -103,20 +122,22 @@ class _Home extends State<Home> with WidgetsBindingObserver {
           'bluetoothEnabled=$bluetoothEnabled');
       return;
     }
-    final regions = <Region>[
-      Region(
-        identifier: 'KFC',
-        proximityUUID: 'E2C56DB5-DFFB-48D2-B060-D0F5A71096E0',
-      ),
-      Region(
-        identifier: 'Burger King',
-        proximityUUID: 'f04cd654-871a-40e1-ba1a-a139b67dbddd',
-      ),
-      Region(
-        identifier: 'McDonalds',
-        proximityUUID: 'cce1cd20-0111-4466-9aef-37ff3d842154',
-      ),
-    ];
+
+    print("Hello" + regions.length.toString());
+    // final regions = <Region>[
+    //   Region(
+    //     identifier: 'KFC',
+    //     proximityUUID: 'E2C56DB5-DFFB-48D2-B060-D0F5A71096E0',
+    //   ),
+    //   Region(
+    //     identifier: 'Burger King',
+    //     proximityUUID: 'f04cd654-871a-40e1-ba1a-a139b67dbddd',
+    //   ),
+    //   Region(
+    //     identifier: 'McDonalds',
+    //     proximityUUID: 'cce1cd20-0111-4466-9aef-37ff3d842154',
+    //   ),
+    // ];
 
     if (_streamRanging != null) {
       if (_streamRanging.isPaused) {
@@ -143,17 +164,29 @@ class _Home extends State<Home> with WidgetsBindingObserver {
             });
             print(_beacons.length);
 
+            db.collection("users").get().then((querySnapshot) {
+              querySnapshot.docs.forEach((result) {
+                print(result.data());
+              });
+            });
+
             // _beacons.sort(_compareParameters);
 
-            for (var _beacon in _beacons) {
-              for (var _resturant in resturants) {
-                if (_beacon.proximityUUID == _resturant.uuid) {
-                  resturantsList.add(_resturant);
-                  break;
-                }
-              }
-            }
-            print("KK" + resturantsList.length.toString());
+            // for (var _beacon in _beacons) {
+            //   for (var _resturant in resturants) {
+            //     if (_beacon.proximityUUID == _resturant.uuid) {
+            //       resturantsList.add(_resturant);
+            //       break;
+            //     }
+            //   }
+            // }
+
+            // if (_beacons.length > beaconLength) {
+            //   resturantsList.add(createResturante(
+            //       _beacons[beaconLength].proximityUUID, beaconLength++));
+            // }
+
+            // print("KK" + resturantsList.length.toString());
           });
         // else
         // found = false;
@@ -257,6 +290,73 @@ class _Home extends State<Home> with WidgetsBindingObserver {
       ),
     );
   }
+}
+
+Resturant createResturante(String uuid, int i) {
+  Resturant tempResturante;
+  FirebaseFirestore.instance
+      .collection('restaurantes')
+      .doc(uuid)
+      .snapshots()
+      .forEach((element) {
+    if (element.exists) {
+      print(element.data()['title']);
+      tempResturante = new Resturant(
+          id: i,
+          title: element.data()['title'],
+          isSaved: true,
+          avaliable: element.data()['isAvailable'],
+          imageURL: element.data()['imageURL'],
+          items: [
+            Item(
+              id: 1,
+              title: "Gamer's Meal",
+              price: 30,
+              imageURL:
+                  "https://images.phi.content-cdn.io/cdn-cgi/image/height=170,width=180,quality=50/https://images-am.cdn.martjack.io/azure/am-resources/126cf14c-121b-4547-945f-e3b73359f7d6/Images/ProductImages/Large/Gamer%20Box.png",
+            ),
+            Item(
+              id: 2,
+              title: "Super Mega Meal",
+              imageURL:
+                  "https://images.phi.content-cdn.io/cdn-cgi/image/height=170,width=180,quality=50/https://images-am.cdn.martjack.io/azure/am-resources/126cf14c-121b-4547-945f-e3b73359f7d6/Images/ProductImages/Large/Super%20mega%20deal_new.png",
+              price: 54,
+            ),
+            Item(
+              id: 3,
+              title: "Mighty Zinger Box",
+              imageURL:
+                  "https://images.phi.content-cdn.io/cdn-cgi/image/height=170,width=180,quality=50/https://images-am.cdn.martjack.io/azure/am-resources/126cf14c-121b-4547-945f-e3b73359f7d6/Images/ProductImages/Large/NMIGHTYZINGERBOX.png",
+              price: 34,
+            ),
+          ],
+          uuid: element.reference.id);
+    }
+  });
+  return tempResturante;
+}
+
+Future<List<Region>> getData() async {
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  List _regions = <Region>[];
+
+  await db.collection("restaurantes").get().then((querySnapshot) {
+    querySnapshot.docs.forEach((result) {
+      print("asdasd");
+      print(result.data());
+      if (result.exists) {
+        print("aasdasdasd" + result.exists.toString());
+        _regions.add(new Region(
+            identifier: result.data()['title'],
+            proximityUUID: result.reference.id));
+        // rest
+      }
+    });
+  });
+
+  // }).whenComplete(() => print("object"));
+  print("Tell me why" + _regions.length.toString());
+  return _regions;
 }
 
 class BackgroundImage extends StatelessWidget {

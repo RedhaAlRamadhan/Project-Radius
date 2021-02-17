@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "295360770785",
+    "project_id": "grad-project-radius",
+    "storage_bucket": "grad-project-radius.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295360770785:android:da6cbda9b703335047fda0",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295360770785-efvaei1vi2etlgfki6ivqhf5j0u9slbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj1rai8NRmHf9m8VYwrU20qWWdIhmDrIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295360770785-efvaei1vi2etlgfki6ivqhf5j0u9slbt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

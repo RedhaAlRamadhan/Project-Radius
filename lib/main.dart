@@ -1,13 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'model/resturant.dart';
-import 'scenes/user/menu.dart';
-import 'scenes/user/home.dart';
+import 'package:project/model/resturant.dart';
+import 'package:project/scenes/user/menu.dart';
+import 'package:project/scenes/user/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project/test copy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(
     MaterialApp(
       title: 'Navigation Basics',
@@ -17,6 +18,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  // Firestore.instance.collection('baby').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,11 +92,11 @@ class MyApp extends StatelessWidget {
                     },
                   ),
                   ElevatedButton(
-                    child: Text('Open Order Info'),
+                    child: Text('Test'),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Menu()),
+                        MaterialPageRoute(builder: (context) => Test()),
                       );
                     },
                   ),
