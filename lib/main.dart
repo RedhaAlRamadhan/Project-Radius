@@ -6,6 +6,7 @@ import 'package:project/scenes/user/menu.dart';
 import 'package:project/scenes/user/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project/test copy.dart';
+import 'package:project/FirebaseTest.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,6 +98,15 @@ class MyApp extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Test()),
+                      );
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text('FirebaseTest'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FirebaseTest()),
                       );
                     },
                   ),
