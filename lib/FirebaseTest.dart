@@ -81,9 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void deleteData() async {
-    // for (var resturant in resturants) {
-    //   databaseReference.child(resturant).remove();
-    // }
+    forr (var resturant in resturants) {
+      databaseReference.child(resturant).remove();
+    }
   }
 
   void _incrementCounter() {
