@@ -45,23 +45,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var resturants = ['KFC', 'MCDONALDS','BURGER KING', 'WAFI', 'CASA PASTA', 'DOMINOS PIZZA', 'PIZZA HUT', 'FIVE GYS', 'IN N OUT', 'HARDEEZ'];
+
   final databaseReference = FirebaseDatabase.instance.reference();
 
   void createRecord() {
     try {
       print("Trying to create records...");
-      databaseReference.child("A").set({
-        'name': 'aaaaaaaa',
-        'description': 'aaaaaaaa'
-      });
-      databaseReference.child("B").set({
-        'name': 'bbbbbbb',
-        'description': 'bbbbbbb'
-      });
-      databaseReference.child("C").set({
-        'name': 'cccccccccccc',
-        'description': 'cccccccccccc'
-      });
+      for (var resturant in resturants) {
+        databaseReference.child("Resturants").child(resturant).set({
+          'name': 'aaaa',
+          'description': 'kyk5'
+        });
+      }
+
     } catch (e) {
       print(e);
     }
@@ -84,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void deleteData() async {
-    databaseReference.child('1').remove();
+    // for (var resturant in resturants) {
+    //   databaseReference.child(resturant).remove();
+    // }
   }
 
   void _incrementCounter() {
